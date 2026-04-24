@@ -90,7 +90,7 @@ class TursoConnection:
     def close(self):
         pass
 
-def connecter_sqlite():  # ← garde le même nom, rien à changer dans le reste du code !
+def connecter_sqlite():
     return TursoConnection()
 
 def login_required(f):
