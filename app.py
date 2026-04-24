@@ -34,11 +34,34 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
 # Créer le dossier uploads s'il n'existe pas
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-def connecter_sqlite():
-    """Connexion à la base de données SQLite"""
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+TURSO_URL = "https://vocale-vitaloccass.aws-ap-northeast-1.turso.io"
+TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzcwMjA0MDgsImlkIjoiMDE5ZGJlYTEtM2EwMS03MmU2LWE2ZDgtN2ZmM2RkYzVlMTZhIiwicmlkIjoiY2JiOTcwYWUtYmQxOC00MjYzLTgzYzgtMTU4NDk0OGNiODk4In0.3qmHkcN6TVLTq7Kbql4hRevVfsB8nCMOMXlbsvslIb3P1Fe-mQeU9_v8aTxiONu8RrYhWfHywUu8X3-PA28PAQ"
+
+headers = {
+    "Authorization": f"Bearer {TURSO_TOKEN}",
+    "Content-Type": "application/json"
+}
+
+#def connecter_sqlite():
+#    """Connexion à la base de données SQLite"""
+#    conn = sqlite3.connect(DB_PATH)
+#    conn.row_factory = sqlite3.Row
+#    return conn
+
+
+def connecter_sqlite(sql, params=[]):
+    args = [{"type": "text", "value": str(p)} for p in params]
+    res = requests.post(
+        f"{TURSO_URL}/v2/pipeline",
+        headers=headers,
+        json={"requests": [{"type": "execute", "stmt": {"sql": sql, "args": args}}]}
+    )
+    data = res.json()
+    rows = data["results"][0]["response"]["result"]["rows"]
+    cols = data["results"][0]["response"]["result"]["cols"]
+    # Retourne liste de dicts comme sqlite3.Row
+    return [dict(zip([c["name"] for c in cols], [v["value"] for v in row])) for row in rows]
+
 
 def login_required(f):
     """Décorateur pour protéger les routes"""
