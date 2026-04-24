@@ -49,7 +49,7 @@ headers = {
 #    return conn
 
 
-def connecter_sqlite(sql, params=[]):
+def _turso_execute(sql, params=[]):
     args = [{"type": "text", "value": str(p)} for p in params]
     res = requests.post(
         f"{TURSO_URL}/v2/pipeline",
@@ -57,11 +57,41 @@ def connecter_sqlite(sql, params=[]):
         json={"requests": [{"type": "execute", "stmt": {"sql": sql, "args": args}}]}
     )
     data = res.json()
-    rows = data["results"][0]["response"]["result"]["rows"]
-    cols = data["results"][0]["response"]["result"]["cols"]
-    # Retourne liste de dicts comme sqlite3.Row
-    return [dict(zip([c["name"] for c in cols], [v["value"] for v in row])) for row in rows]
+    result = data["results"][0]["response"]["result"]
+    cols = [c["name"] for c in result["cols"]]
+    return [dict(zip(cols, [v["value"] for v in row])) for row in result["rows"]]
 
+class TursoCursor:
+    def __init__(self):
+        self.results = []
+
+    def execute(self, sql, params=[]):
+        self.results = _turso_execute(sql, params)
+        return self
+
+    def fetchall(self):
+        return self.results
+
+    def fetchone(self):
+        return self.results[0] if self.results else None
+
+class TursoConnection:
+    def cursor(self):
+        return TursoCursor()
+
+    def execute(self, sql, params=[]):
+        c = TursoCursor()
+        c.execute(sql, params)
+        return c
+
+    def commit(self):
+        pass
+
+    def close(self):
+        pass
+
+def connecter_sqlite():  # ← garde le même nom, rien à changer dans le reste du code !
+    return TursoConnection()
 
 def login_required(f):
     """Décorateur pour protéger les routes"""
