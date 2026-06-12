@@ -3232,7 +3232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-async function validerAjoutArticle() {
+function validerAjoutArticle() {
     const reference   = (document.getElementById('input-reference').value || '').trim().toUpperCase();
     const designation = (document.getElementById('input-designation').value || '').trim().toUpperCase();
     const msg         = document.getElementById('msg-add-article');
@@ -3326,7 +3326,7 @@ function retourRechercheEdit() {
     setTimeout(() => document.getElementById('edit-search-input').focus(), 100);
 }
 
-async function rechercherArticleAModifier() {
+function rechercherArticleAModifier() {
     const q = (document.getElementById('edit-search-input').value || '').trim();
     const msgSearch = document.getElementById('msg-edit-search');
     const resultsDiv = document.getElementById('edit-search-results');
@@ -3405,7 +3405,7 @@ async function rechercherArticleAModifier() {
     }
 }
 
-async function validerModificationArticle() {
+function validerModificationArticle() {
     const referenceOriginale  = (document.getElementById('edit-reference-originale').value  || '').trim().toUpperCase();
     const nouvelleReference   = (document.getElementById('edit-nouvelle-reference').value   || '').trim().toUpperCase();
     const nouvelleDesignation = (document.getElementById('edit-nouvelle-designation').value || '').trim().toUpperCase();
@@ -3467,7 +3467,7 @@ async function validerModificationArticle() {
     }
 }
 
-async function validerSuppressionArticle() {
+function validerSuppressionArticle() {
     const reference = (document.getElementById('edit-reference-originale').value || '').trim().toUpperCase();
     const msg = document.getElementById('msg-edit-article');
     const btn = document.getElementById('btn-supprimer-edit');
