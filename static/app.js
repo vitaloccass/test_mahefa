@@ -2997,14 +2997,14 @@ function exporterTXT() {
     // 🔍 Vérifier si le fichier existe déjà (pour récupérer le SHA)
     let sha = undefined;
     try {
-        const check = await fetch(apiUrl, {
+        const check =  fetch(apiUrl, {
             headers: {
                 "Authorization": `Bearer ${GITHUB_TOKEN}`,
                 "Accept": "application/vnd.github+json"
             }
         });
         if (check.ok) {
-            const existing = await check.json();
+            const existing =  check.json();
             sha = existing.sha; // Nécessaire pour mettre à jour un fichier existant
         }
     } catch (e) {
@@ -3020,7 +3020,7 @@ function exporterTXT() {
     };
 
     try {
-        const response = await fetch(apiUrl, {
+        const response =  fetch(apiUrl, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${GITHUB_TOKEN}`,
@@ -3030,7 +3030,7 @@ function exporterTXT() {
             body: JSON.stringify(body)
         });
 
-        const data = await response.json();
+        const data =  response.json();
 
         if (response.ok) {
             console.log("✅ Fichier envoyé sur GitHub :", data.content?.html_url);
@@ -3251,13 +3251,13 @@ function validerAjoutArticle() {
     msg.innerText = '';
 
     try {
-        const response = await fetch('/add_article', {
+        const response =  fetch('/add_article', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ reference, designation })
         });
 
-        const data = await response.json();
+        const data =  response.json();
 
         if (response.ok && data.success) {
             msg.style.color = '#059669';
@@ -3343,8 +3343,8 @@ function rechercherArticleAModifier() {
     resultsDiv.innerHTML = '';
 
     try {
-        const response = await fetch(`/search_article?q=${encodeURIComponent(q)}`);
-        const data = await response.json();
+        const response =  fetch(`/search_article?q=${encodeURIComponent(q)}`);
+        const data =  response.json();
 
         if (!response.ok) {
             msgSearch.style.color = '#dc2626';
@@ -3423,7 +3423,7 @@ function validerModificationArticle() {
     msg.innerText = '';
 
     try {
-        const response = await fetch('/edit_article', {
+        const response =  fetch('/edit_article', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -3433,7 +3433,7 @@ function validerModificationArticle() {
             })
         });
 
-        const data = await response.json();
+        const data =  response.json();
 
         if (response.ok && data.success) {
             msg.style.color = '#059669';
@@ -3486,13 +3486,13 @@ function validerSuppressionArticle() {
     msg.innerText = '';
 
     try {
-        const response = await fetch('/delete_article', {
+        const response =  fetch('/delete_article', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ reference })
         });
 
-        const data = await response.json();
+        const data =  response.json();
 
         if (response.ok && data.success) {
             msg.style.color = '#059669';
