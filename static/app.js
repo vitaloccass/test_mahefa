@@ -3225,6 +3225,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') rechercherArticleAModifier();
         });
     }
+
+    const micBtn = document.getElementById("micBtn");
+    if (micBtn) {
+        micBtn.addEventListener("click", handleMicClick);
+    }
 });
 
 async function validerAjoutArticle() {
@@ -3517,4 +3522,6 @@ async function validerSuppressionArticle() {
         btn.innerText = '🗑️ Supprimer';
     }
 }
+
+window.handleMicClick = handleMicClick;
 // ====================================================================
